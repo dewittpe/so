@@ -1,0 +1,66 @@
+\documentclass{article}
+\usepackage{hyperref,fullpage}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+  }
+
+
+\begin{document}
+Thanks to \url{https://classroomclipart.com} for the graphics.
+
+For displaying several pre-made figures you could write out the figure
+environments yourself.
+
+\begin{figure}[!h]
+  \centering
+  \caption{Explicit figure environment. \label{fig:00}}
+  \includegraphics[width=0.2\linewidth]{figs/man-working-on-a-computer-clipart-318.jpg}
+\end{figure}
+
+To create many figure environments, I would suggest building a data.frame with
+captions, figure labels, options, and file paths:
+
+<<>>=
+myfigs <-
+  data.frame(caption = c("Bright Red Fall Foliage", "Chat 9", "Man On Computer"),
+             label   = c("brff", "c9", "moc"),
+             option  = c("width=0.1\\linewidth", "width=0.2\\linewidth", "width=0.3\\linewidth"),
+             path    = c("figs/bright-red-fall-foliage-photo_8304-Edit.jpg",
+                         "figs/chat-9-94.jpg",
+                         "figs/man-working-on-a-computer-clipart-318.jpg"),
+             stringsAsFactors = FALSE)
+
+myfigs
+@
+
+Build a function for creating a figure environment:
+
+<<>>=
+build_fig_env <- function(caption = "", label = "", option = "", path = "") {
+  cat(
+  sprintf("\\begin{figure}[!h]\n\\centering\n\\caption{%s \\label{fig:%s}}\n\\includegraphics[%s]{%s}\n\\end{figure}\n\n\n",
+          caption, label, option, path)
+  )
+}
+@
+
+Now call the function using mapply.  The mapply call is wrapped in a call to
+invisible to suppress the irrelevant output.
+
+<<results = "asis">>=
+invisible(
+          mapply(build_fig_env,
+                 caption  = myfigs$caption,
+                 label    = myfigs$label,
+                 option   = myfigs$option,
+                 path     = myfigs$path,
+                 SIMPLIFY = FALSE)
+)
+@
+
+This is just one solution to your question.  
+
+\end{document}
