@@ -1,0 +1,37 @@
+---
+output:
+   pdf_document: default
+---
+
+```{r mychunk, fig.show = "hide", echo = FALSE, fig.height=3, fig.width=5}
+
+library(knitr)
+library(ggplot2)
+
+knitr::opts_chunk$set(dev = 'pdf')
+
+# sample data
+dat <- data.frame(
+   text = sapply(1:10, FUN = function(x) { paste0(sample(x = LETTERS, size = 15), 
+                                                  collapse = "")}), 
+       x1 = rnorm(10))
+
+# generate plot
+ggplot(dat, aes(x = text, y = x1))+
+  geom_bar(stat = "identity")
+
+# table I want to print
+out <- data.frame(text = dat$text, 
+                  plot = sprintf("![](%s%s-%s.pdf)", 
+                                 opts_current$get("fig.path"), 
+                                 opts_current$get("label"), 
+                                 1))
+
+# plots not showing when format = "latex"
+kable(out) #, format = "latex")
+```
+
+```{r}
+devtools::session_info()
+```
+
