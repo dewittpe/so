@@ -1,0 +1,31 @@
+---
+title: "Plot size trouble demo"
+author: "for stackoverflow"
+output: word_document
+---
+
+Here I include graphics in a word document using the `emf` printing device.
+
+```{r dev = 'emf', fig.ext = 'emf'}
+require(devEMF)
+plot(1:10, 1:10)
+
+```
+
+The plot is small, so I try to make it bigger with the `fig.height` and fig.width` options:
+
+```{r dev='emf', fig.ext='emf', fig.height=10, fig.width=10}
+require(devEMF)
+plot(1:10, 1:10)
+
+```
+
+The plot region stayed the same size, and now I have super-small labels and points!
+
+Finally, I try to use the `out.width` and `out.height` options to rescale the figure to a different size, but this produces nothing at all:
+
+```{r dev='emf', fig.ext='emf', fig.height=10, fig.width=10, out.width = '5in', out.height= '5in'}
+require(devEMF)
+plot(1:10, 1:10)
+
+```
