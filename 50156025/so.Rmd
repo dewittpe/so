@@ -1,0 +1,25 @@
+This document was rendered via the following:
+
+```{r eval = FALSE}
+rmarkdown::render("so.Rmd",
+                  output_format = c("html_document", "pdf_document", "word_document"))
+```
+
+
+```{r chunk-the-first}
+2 + 2
+```
+
+Some text...
+
+```{bash}
+MY_NAME='Fred'
+echo $MY_NAME
+```
+
+More text...
+
+```{r}
+devtools::session_info()
+```
+
