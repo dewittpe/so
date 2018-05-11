@@ -1,0 +1,93 @@
+---
+title: 'Debugger in a knited doc'
+output: html_document
+---
+
+
+```{r label='internal-setup', include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
+
+Try using the R package
+[subprocess](https://cran.r-project.org/package=subprocess) to run some code
+in a seperate R session.  The following example has been built using code
+snippets provided in the 'intro' vignette from the subprocess package and the
+example provided in the help file for `debugger`.
+
+The first thing we will do is build a function for calling the R binary.
+
+
+```{r label="setup_subprocess"}
+library(subprocess)
+
+R_binary <- function () {
+  R_exe <- ifelse (tolower(.Platform$OS.type) == "windows", "R.exe", "R")
+  return(file.path(R.home("bin"), R_exe))
+}
+```
+
+
+Spawning a child R process is done as follows:
+
+
+```{r label="spawning"}
+child_r <- subprocess::spawn_process(R_binary(), c("--vanilla"))
+Sys.sleep(2) # allow sufficient time for the child R process to start
+subprocess::process_read(child_r)$stdout
+```
+
+
+We will write some code as a character string and send it to the child
+process.
+
+
+```{r }
+unlink("testdump.rda")
+code <-
+'
+options(error = quote(dump.frames("testdump", TRUE)))
+
+f <- function() {
+  g <- function() stop("test dump.frames")
+  g()
+}
+f()   # will generate a dump on file "testdump.rda"
+options(error = NULL)
+'
+
+invisible(subprocess::process_write(child_r, code))
+subprocess::process_read(child_r)$stdout
+```
+
+
+Now, you can load the dump into the child process and start the debugger.
+
+```{r }
+code <-
+'
+load("testdump.rda")
+debugger(testdump)
+'
+invisible(subprocess::process_write(child_r, code))
+subprocess::process_read(child_r)$stdout
+```
+
+
+Say you want to start walking through the debugger for `f(1)`
+
+```{r }
+invisible(subprocess::process_write(child_r, "1\n"))
+subprocess::process_read(child_r)$stdout
+```
+
+
+You can continue to walk through the debugging as needed via the child
+process.
+
+Don't forget to terminate the process
+
+```{r }
+subprocess::process_terminate(child_r)
+```
+
