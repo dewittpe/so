@@ -1,0 +1,33 @@
+---
+title: "Untitled"
+author: "ath"
+date: "07/02/2015"
+output: html_document
+---
+
+```{r set-options}
+library("knitr")
+library(kableExtra)
+library(magrittr)
+options(width = 80)
+```
+
+```{r test, results='markup'}
+df.matrix <- matrix(runif(300, min = 0, max = 300), nrow = 2)
+df.matrix <- as.data.frame(df.matrix)
+colnames(df.matrix) <- paste("col", as.character(seq(1:150)), sep = "")
+```
+
+```{r kable, results = "asis"}
+df.matrix %>%
+  kable(format = "html", col.names = colnames(df.matrix)) %>%
+  kable_styling() %>%
+  kableExtra::scroll_box(width = "100%", height = "100px")
+```
+
+<br>
+
+```{r}
+devtools::session_info()
+```
+
