@@ -1,0 +1,26 @@
+```{r}
+id <- c(1,2,3)
+lat <- c(51,52,52)
+lon <- c(0.1,1,-2)
+coord <- data.frame(id, lat, lon)
+
+library(ggiraph)
+library(ggplot2)
+
+UK <- map_data(map = 'world', region = c('UK', 'IRELAND'))
+
+baseMap <- ggplot() +
+  coord_map() +
+  geom_path(data = UK, aes(x = long, y = lat, group = group)) 
+
+finalMap <- baseMap + 
+  geom_point_interactive(data = coord, aes(x = lon, y = lat, tooltip = id, size = 2))
+
+ggiraph(ggobj = finalMap, width = 0.7)
+```
+
+```{r}
+print(sessionInfo(), local = FALSE)
+```
+
+
