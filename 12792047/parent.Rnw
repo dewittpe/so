@@ -1,0 +1,41 @@
+\documentclass{article}
+\usepackage{fullpage}
+\begin{document}
+
+<<include = FALSE>>=
+knitr::opts_chunk$set(collapse = FALSE)
+@
+
+<<>>=
+library(subprocess)
+
+# define a function to identify the R binary
+R_binary <- function () {
+  R_exe <- ifelse (tolower(.Platform$OS.type) == "windows", "R.exe", "R")
+  return(file.path(R.home("bin"), R_exe))
+}
+@
+
+
+<<>>=
+# Start a subprocess running vanilla R.
+subR <- subprocess::spawn_process(R_binary(), c("--vanilla --quiet"))
+Sys.sleep(2) # wait for the process to spawn
+
+# write to the process
+subprocess::process_write(subR, "y <- rnorm(100, mean = 2)\n")
+subprocess::process_write(subR,  "summary(y)\n")
+
+# read from the process
+subprocess::process_read(subR, PIPE_STDOUT)
+
+# kill the process before moving on.
+subprocess::process_kill(subR)
+@
+
+
+<<>>=
+print(sessionInfo(), local = FALSE)
+@
+
+\end{document}
