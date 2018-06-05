@@ -1,0 +1,37 @@
+---
+title: "Ryacas \\LaTeX\\ Expression in Knitr"
+output: pdf_document()
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
+
+Set up chunk:
+```{r} 
+library(Ryacas)
+longrun_cost <- expression((c * mu) + h * ( lambda / (mu-lambda)))
+fmt <- sprintf("TeXForm(%s)", longrun_cost)
+eqn_string <- sprintf("$%s$", yacas(fmt, retclass = "unquote"))
+```
+
+The next few chunks will show the different ways that the Ryacas expression
+can be rendered.
+
+# Chunk 1
+A chunk with `results = "markup"`.
+```{r}
+eqn_string
+```
+
+# Chunk 2
+A chunk with `results = "asis"`.
+```{r, results = "asis"}
+cat(eqn_string)
+```
+
+```{r}
+print(sessionInfo(), local = FALSE)
+```
+
