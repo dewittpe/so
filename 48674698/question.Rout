@@ -1,0 +1,38 @@
+
+R version 3.4.3 (2017-11-30) -- "Kite-Eating Tree"
+Copyright (C) 2017 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> #' I have a task to 
+> 
+> servr::httd(daemon = TRUE, browser = FALSE)
+Serving the directory /home/dewittpe/so/my-servr-question at http://127.0.0.1:4321
+> 
+> R.utils::withTimeout(
++                     {
++                       s <- rvest::html_session("http://127.0.0.1:4321")
++                       s 
++                     },
++                     timeout = 3,
++                     onTimeout = "error")
+Error: reached elapsed time limit
+Error in curl::curl_fetch_memory(url, handle = handle) : 
+  Operation was aborted by an application callback
+Calls: <Anonymous> ... tryCatchOne -> <Anonymous> -> throw -> throw.error -> <Anonymous>
+Execution halted
