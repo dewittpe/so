@@ -1,0 +1,48 @@
+---
+title: setup
+output:
+  rmarkdown::html_document:
+    toc_float: true
+    code_folding: show
+---
+
+```{r}
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
+# This is section 1
+
+30 NE Cherokee Beach Road
+Belfair Washington 98528
+
+
+
+
+starting a new div
+```{r, echo = FALSE, results = "asis"}
+cat('<div class="r-code-collapse collapse" aria-expanded="false" id="rcode-001" style="height: 0px;"> == $0')
+```
+end div, start a chunk
+```{r}
+args(rmarkdown::html_document)
+```
+now for the end of the div
+```{r, echo = FALSE, results = "asis"}
+cat('</div>')
+```
+out of the div
+
+```{r}
+2 + 1
+lm(mpg ~ wt, data = mtcars)
+```
+
+## this is a sub section
+text goes here
+
+```{r}
+3 + 2
+plot(1:10, 1:10)
+```
+
+more text

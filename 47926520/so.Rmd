@@ -1,0 +1,37 @@
+# edgebundleR and knitr
+Answer to https://stackoverflow.com/questions/47926520/edgebundle-doesnt-render-plot-when-in-loop-in-markdown
+
+```{r}
+set.seed(42)
+library(edgebundleR)
+library(igraph)
+```
+
+## test the function
+
+```{r}
+foo <- function() {
+  adjm <- matrix(sample(0:1, 100, replace = TRUE, prob = c(0.6, 0.4)), nc = 10)
+  g <- graph.adjacency(adjm)
+  edgebundle(g)
+}
+foo()
+foo()
+```
+
+## test the function in a for loop
+
+```{r}
+tmpfile <- tempfile(fileext = ".Rmd")
+for(i in 1:3) {
+  cat("### This is edgebundle", i, "of 3.\n```{r}\nfoo()\n```\n",
+      file = tmpfile, append = TRUE) 
+}
+```
+
+```{r child = tmpfile}
+```
+
+```{r}
+print(sessionInfo(), local = FALSE)
+```

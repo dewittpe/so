@@ -1,0 +1,12 @@
+---
+output: html_document
+---
+
+```{r, include=FALSE}
+knitr::read_chunk("script_chunk.R")
+```
+
+### Print sessionInfo()
+
+```{r, ref.label='script_chunk', eval=FALSE}
+``` 

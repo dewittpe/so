@@ -1,0 +1,20 @@
+---
+title: "Don't Panic"
+author: "Ford Perfect"
+output: pdf_document
+---
+
+
+```{r, include = F}
+library(ggplot2)
+```
+
+# Introduction
+
+```{r, echo = F, fig.cap = "My plot"}
+ggplot(mpg) + geom_bar(aes(x = as.factor(cyl), y = hwy), stat="identity")
+```
+
+```{r, echo = F, fig.cap = "My plot", dev = "png"}
+ggplot(mpg) + geom_bar(aes(x = as.factor(cyl), y = hwy), stat="identity")
+```

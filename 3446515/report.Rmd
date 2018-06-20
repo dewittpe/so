@@ -1,0 +1,39 @@
+---
+title: "My Document"
+output: html_document
+params:
+  minimum: 
+    label: "Minimum:"
+    value: 100
+    input: slider
+    min: 0
+    max: 1000
+  region:
+    label: "Region:"
+    value: east
+    input: select
+    choices: [east, west, north, south]
+  datafile: 
+    label: "Input dataset:"
+    value: results.csv
+    input: file
+---
+
+What is in the `params` object?
+
+```{r}
+params
+```
+
+Read in the data set:
+
+```{r}
+dat <- readr::read_csv(file = params$datafile)
+dplyr::glimpse(dat)
+```
+
+```{r}
+print(sessionInfo(), local = FALSE)
+```
+
+

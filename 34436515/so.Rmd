@@ -1,0 +1,16 @@
+---
+title: "SO Example"
+params:
+  data:
+    input: file
+    label: "Input Dataset:"
+    value: 'myData.csv'
+---
+
+```{r}
+params$data
+```
+
+```{r}
+readr::read_csv(params$data)
+```

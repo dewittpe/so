@@ -1,0 +1,33 @@
+\documentclass{article}
+\usepackage{lipsum}
+
+\begin{document}
+\lipsum[1]
+<<setup>>=
+library(knitr)
+read_chunk("test.R")
+chunks <- knitr:::knit_code$get()  # use this to check chunks in the current session
+@
+
+Inine code {\tt 2 + 2 = \Sexpr{2 + 2}}.
+
+Calling a chunk inline: 
+%Sexpr{eval(parse(text = paste(chunks$scatter, collapse = ";")))}
+
+<<>>=
+knit_hooks$get
+@
+
+
+\lipsum[1]
+
+\begin{figure}
+<<scatter>>=
+@
+\end{figure}
+
+\begin{figure}
+<<hists>>=
+@
+\end{figure}
+\end{document}
