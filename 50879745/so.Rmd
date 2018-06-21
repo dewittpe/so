@@ -1,0 +1,83 @@
+---
+title: "Answer for SO Question 50879745"
+header-includes:
+  \usepackage{subcaption}
+  \usepackage{booktabs}
+  \usepackage[table]{xcolor}
+---
+
+
+```{r start-block}
+library(dplyr)
+library(knitr)
+library(kableExtra)
+opts_chunk$set(echo = FALSE)
+``` 
+
+Build two example tables based on the `mtcars` data set.
+
+
+```{r sample, results='asis'}
+t1 <- kable(head(mtcars)[1:3], format = "latex", booktabs = TRUE) %>%  kable_styling(latex_options = c("striped"), font_size=5)
+t2 <- kable(head(mtcars)[4:6], format = "latex", booktabs = TRUE) %>%  kable_styling(latex_options = c("striped"), font_size=5) 
+```
+
+Modify the tables to use the `subtable` environment and added labels and
+captions.
+
+```{r}
+t1 <- gsub("\\begin{table}[H]", "\\begin{subtable}[b]{0.48\\linewidth}\n\\caption{\\label{tab:1a}This is Table 1 in the example, but now labeled with a (a).}\n", t1, fixed = TRUE)
+t1 <- gsub("\\end{table}", "\\end{subtable}", t1, fixed = TRUE) 
+
+t2 <- gsub("\\begin{table}[H]", "\\begin{subtable}[b]{0.48\\linewidth}\n\\caption{\\label{tab:1b}Shorter caption.}", t2, fixed = TRUE)
+t2 <- gsub("\\end{table}", "\\end{subtable}", t2, fixed = TRUE) 
+```
+
+Place the tables into the document.
+
+```{r, results = "asis"}
+cat("",
+    "\\begin{table}[!htb]",
+    "\\centering",
+    "\\caption{\\label{tab:tab1}Two tables, side-by-side.}",
+    t1,
+    t2,
+    "\\end{table}",
+    "",
+    sep = "\n") 
+```
+
+Another example, start by reading in a rds file.
+
+
+```{r table, results = "asis"}
+tbl <- readRDS("table.RDS") #load file using the link "tbl"
+cat(tbl)
+```
+
+A few modifications to Table~\ref{tab:comments-block} will be made so that we
+can show the table twice in a `subtable`.
+
+```{r table2_mod}
+tbl <- gsub("\\begin{table}", "\\begin{subtable}[t]{0.48\\linewidth}", tbl, fixed = TRUE)
+tbl <- gsub("\\end{table}", "\\end{subtable}", tbl, fixed = TRUE) 
+```
+
+Printing the tables works, see \ref{tab:tab3}, but there is overlap as the
+tables are too wide.  Consider the `tabularx` package as a solution or an ad hoc
+approach of changing the font size.
+
+```{r, results = "asis"}
+cat("",
+    "\\begin{table}[!htb]",
+    "\\centering",
+    "\\caption{\\label{tab:tab3}Two tables, side-by-side.}",
+    # "\\scriptsize",
+    tbl,
+    tbl,
+    "\\end{table}",
+    # "\\normalsize",
+    "",
+    sep = "\n") 
+```
+
