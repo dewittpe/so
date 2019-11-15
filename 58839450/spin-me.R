@@ -1,0 +1,37 @@
+#'---
+#'title: R and Python in a spin file.
+#'---
+#'
+#' This is an example of one way to write one R script, containing both R and
+#' python, and can be spun to .Rmd via knitr::spin.
+#'
+#+ label = "setup"
+library(nycflights13)
+library(ggplot2)
+library(reticulate)
+use_condaenv()
+
+#'
+#' Create the file flights.csv to
+#'
+#+ label = "create_flights_csv"
+write.csv(flights, file = "flights.csv")
+
+#'
+#' The file flights.py will read in the data from the flights.csv file.  It can
+#' be evaluated in this script via source_python().  This sould add a data.frame
+#' called `py_flights` to the workspace.
+source_python(file = "flights.py")
+
+#'
+#' And now, plot the results.
+#'
+#+ label = "plot"
+ggplot(py_flights) + aes(carrier, arr_delay) + geom_point() + geom_jitter()
+
+
+# /* spin and knit this file to html
+knitr::spin(hair = "spin-me.R", knit = FALSE)
+rmarkdown::render("spin-me.Rmd")
+# */
+
