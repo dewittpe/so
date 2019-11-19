@@ -1,0 +1,53 @@
+\documentclass[pdf, t, 10pt]{beamer}
+\usetheme{Antibes}
+\mode<presentation>{}
+\usepackage{array}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash\hspace{0pt}}p{#1}}
+
+\begin{document}
+\begin{frame}[fragile]
+  \frametitle{Table and Graphics}
+  \framesubtitle{Side-by-Side via minipage}
+
+<<label = "setup", include = FALSE>>=
+# Ficticious data
+grad <- c(0.846, 0.863, 0.852, 0.873)
+counts <- c(500, 485, 520, 545)
+year <- c(1, 2, 3, 4)
+library(ggplot2)
+library(xtable)
+
+format_pct <- function(x){
+  paste0(round(x * 100, 1), "%")
+}
+df <- data.frame(Year = as.integer(year),
+                 Counts = as.integer(counts),
+                 Grad_Rate = grad,
+                 stringsAsFactors = FALSE)
+p <- ggplot(df, aes(x = Year, y = Grad_Rate, weight = counts)) + 
+  geom_point() +
+  geom_smooth(method = "lm") + 
+  theme_bw() + 
+  scale_y_continuous(labels = format_pct, breaks = seq(0.5, 1, by = 0.05),
+                     limits = c(0.8, 1)) + 
+  xlab("Year") + 
+  ylab("Graduation Rate")
+@
+
+  \begin{minipage}{0.5\linewidth}
+<<label = "table", echo = FALSE, results='asis'>>=
+print(xtable(df, align = "lrrr"),
+      include.rownames = FALSE,
+      latex.environments="flushleft"
+      )
+@
+  \end{minipage}% 
+  \begin{minipage}{0.5\linewidth}
+<<label = "graphic", echo = FALSE, fig.width=3, fig.height=3, fig.align='right'>>=
+p
+@
+  \end{minipage}
+
+\end{frame}
+
+\end{document}
