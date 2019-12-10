@@ -1,0 +1,43 @@
+---
+author: "author"
+date: '`r Sys.Date()`'
+output: html_document
+---
+
+```{r setup}
+library(dplyr)
+library(ggplot2) 
+library(knitr)
+
+FACET_HEIGHT = 3.4
+FACET_WIDTH  = 5
+
+opts_chunk$set(out.width = "80%",
+               out.height = "80%",
+               eval.after = c("fig.height", "fig.width"))
+```
+
+For the example we'll have one basic plot to which we will set different facets.
+```{r}
+g <- 
+  iris %>%
+  mutate_at("Sepal.Length",cut, 5) %>%
+  mutate_at("Sepal.Width",cut,2) %>%
+  group_by_at(c(1,2,5)) %>%
+  summarize_at("Petal.Length",mean) %>%
+  ggplot(aes(Species, Petal.Length)) +
+  geom_col()
+```
+
+A graphic with two columns
+```{r fig1, fig.height = FACET_HEIGHT * max(ggplot_build(g1)$layout$layout$ROW), fig.width = FACET_WIDTH * max(ggplot_build(g1)$layout$layout$COL)}
+g1 <- g + facet_wrap(Sepal.Length ~ Sepal.Width, ncol = 2)
+g1
+```
+
+
+A graphic with two rows
+```{r fig2, fig.height = FACET_HEIGHT * max(ggplot_build(g2)$layout$layout$ROW), fig.width = FACET_WIDTH * max(ggplot_build(g2)$layout$layout$COL)}
+g2 <- g + facet_wrap(Sepal.Length ~ Sepal.Width, nrow = 2)
+g2
+```
