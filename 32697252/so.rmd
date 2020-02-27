@@ -9,7 +9,7 @@ output:
 
 ```{r setup}
 library(reticulate)
-use_condaenv("anaconda3", required = TRUE)
+reticulate::use_python(python = "/opt/anaconda3/envs/ten2/bin/python", required = TRUE)
 ```
 
 
@@ -22,9 +22,13 @@ You can insert the value of an object created with an R code chunk into text lik
 The sky is `r TMP`
 
 ```{r}
-py_code <- 'COLOR = "red"\nprint(COLOR)'
-py_run_string(code = py_code)
+pycode <- 
+'
+COLOR = "red"
+print(COLOR)
+'
+pyrtn <- py_to_r(py_run_string(code = pycode))
 ```
 
 You cannot do the same thing with Python, or other types of code:
-The car is  `r py_run_string(code = py_code)`
+The car is  `r pyrtn$COLOR`
